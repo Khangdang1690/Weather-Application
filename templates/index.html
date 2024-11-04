@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>weather</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <style>
+    /* Body styling */
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Header / Navbar */
+    nav {
+      background: #4a148c;
+      color: white;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    nav h1 {
+      font-weight: bold;
+      color: #f1f1f1;
+      margin: 0;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Center form */
+    .row form {
+      margin-top: 40px;
+    }
+
+    /* Input field styling */
+    .input-group {
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .input-group input {
+      border: none; /* Remove default border */
+      border-radius: 30px; /* Match the rounded corners */
+      padding: 10px; /* Add some padding for aesthetics */
+      width: 100%; /* Full width to match the container */
+      background-color: #e8eaf6; /* Match the background color */
+      transition: color 0.3s ease; /* Smooth transition for text color */
+    }
+    
+    .input-group-btn button {
+      border-radius: 0; /* Remove rounded corners from button */
+      background-color: #5f9ea0; /* Default button color */
+      color: white; /* Text color */
+      border: none; /* Remove border */
+      padding: 10px 15px; /* Adjust padding */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    }
+    
+    .input-group-btn button:hover {
+      background: #20b2aa; /* Change button color on hover */
+    }        
+
+    /* Data display card */
+    .weather-info {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-align: left;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .weather-info:hover {
+      transform: translateY(-5px);
+    }
+
+    .weather-info h1 {
+      color: #4a148c;
+      font-size: 2.5rem;
+    }
+
+    .weather-info h3,
+    .weather-info h5 {
+      color: #333;
+      margin: 10px 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      nav h1 {
+        font-size: 1.5rem;
+      }
+
+      .input-group .form-control {
+        width: 100%;
+      }
+    }
+
+    .card {
+      background-color: #E0F2F1; /* Set the background color */
+      border-radius: 15px; /* Rounded corners */
+      padding: 30px; /* Increase padding */
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+      margin-top: 30px; /* Margin to move it further down */
+    }
+    
+    .card h1 {
+      font-size: 2.5em; /* Increase header size */
+      font-weight: bold; /* Bold font */
+      color: #006064; /* Dark cyan color */
+    }
+    
+    .card h3, .card h5 {
+      margin: 10px 0; /* Spacing between lines */
+      font-size: 1.3em; /* Increase text size */
+      color: #004d40; /* Darker shade for text */
+    }
+    
+    
+  </style>
+</head>
+
+<body>
+  <nav class="row" style="background: grey; color: white;">
+    <div align="center"><h1 class="col-md-3 text-center">Weather Detector</h1></div>
+  </nav>
+  <br />
+  <br />
+  <center class="row">
+    <form action="{% url 'index' %}" method="post" class="col-md-6 col-md-offset-3">
+      {% csrf_token %}
+      <div class="input-group">
+        <input type="text" class="form-control" name="city" placeholder="Enter city name">
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </center>
+  <div class="row" style="margin-top: 30px;"> <!-- Add margin to the top -->
+    {% if data.country_code %}
+    <div class="col-md-6 col-md-offset-3">
+      <div class="card" style="padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+        <h1 class="text-center" style="font-size: 2.5em;">{{ city }}</h1> <!-- Increase font size -->
+        <div class="weather-info">
+          <h3 style="font-size: 1.5em;"><i class="glyphicon glyphicon-flag"></i> Country Code: <span class="text-info">{{ data.country_code }}</span></h3>
+          <h5 style="font-size: 1.3em;"> <i class="glyphicon glyphicon-screenshot"></i> Coordinates: <span class="text-secondary">{{ data.coordinate }}</span></h5>
+          <h5 style="font-size: 1.3em;"><i class="fas fa-sun"></i> Temperature: <span class="text-danger">{{ data.temp }} °C</span></h5>
+          <h5 style="font-size: 1.3em;"><i class="glyphicon glyphicon-tint"></i> Humidity: <span class="text-danger">{{ data.humidity }}%</span></h5>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  
+  
+</body>
+
+</html>
